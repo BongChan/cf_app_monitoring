@@ -1,0 +1,947 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_BLUEMIX_APP",
+      "label": "bluemix_app",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.4.2"
+    },
+    {
+      "type": "panel",
+      "id": "grafana-alarm_current-panel",
+      "name": "Current Alarm",
+      "version": "0.0.2"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "hideControls": false,
+  "id": null,
+  "links": [],
+  "refresh": "10s",
+  "rows": [
+    {
+      "collapse": false,
+      "height": 234,
+      "panels": [
+        {
+          "content": "##### $space 영역",
+          "id": 38,
+          "links": [],
+          "minSpan": 1,
+          "mode": "markdown",
+          "span": 1,
+          "title": "",
+          "type": "text"
+        },
+        {
+          "aliasColors": {
+            "quota": "#7EB26D",
+            "used": "#1F78C1",
+            "사용된 메모리": "#0A437C",
+            "예약된 메모리": "#7EB26D"
+          },
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_BLUEMIX_APP}",
+          "description": "##### 영역 $space 내 앱 인스턴스 메모리 합계\n\n- 영역 내 모든 인스턴스의 메모리 사용 현황을 표시합니다.\n  - 예약된 앱 인스턴스 메모리는 앱 배포 시 JVM등에 설정한 메모리를 의미합니다.\n  - 사용된 앱 인스턴스 메모리는 앱 인스턴스가 실제로 점유하고 있는 물리 메모리를 의미합니다.",
+          "fill": 0,
+          "id": 14,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "links": [],
+          "minSpan": 1,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+            {
+              "alias": "사용된 메모리",
+              "zindex": 3
+            }
+          ],
+          "spaceLength": 10,
+          "span": 2,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "사용된 메모리",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "1m"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "space"
+                  ],
+                  "type": "tag"
+                }
+              ],
+              "measurement": "bluemix_app_instance_info",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "refId": "A",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "memory"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "sum"
+                  }
+                ]
+              ],
+              "tags": [
+                {
+                  "key": "center",
+                  "operator": "=~",
+                  "value": "/^$dc$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "org",
+                  "operator": "=~",
+                  "value": "/^$org$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "space",
+                  "operator": "=~",
+                  "value": "/^$space$/"
+                }
+              ]
+            },
+            {
+              "alias": "예약된 메모리",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "1m"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "space"
+                  ],
+                  "type": "tag"
+                }
+              ],
+              "measurement": "bluemix_app_instance_info",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "refId": "B",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "memoryQuota"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "sum"
+                  }
+                ]
+              ],
+              "tags": [
+                {
+                  "key": "center",
+                  "operator": "=~",
+                  "value": "/^$dc$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "org",
+                  "operator": "=~",
+                  "value": "/^$org$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "space",
+                  "operator": "=~",
+                  "value": "/^$space$/"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "[$space] Memory 사용율",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_BLUEMIX_APP}",
+          "description": "단순 평균값",
+          "fill": 0,
+          "hideTimeOverride": false,
+          "id": 1,
+          "interval": ">60s",
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "dashUri": "db/bluemix-app-app",
+              "dashboard": "BLUEMIX: APP: APP",
+              "includeVars": true,
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "BLUEMIX: APP: APP",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 3,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$tag_app",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "1m"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "app"
+                  ],
+                  "type": "tag"
+                }
+              ],
+              "measurement": "bluemix_app_instance_info",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "refId": "A",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "cpuUsage"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": [
+                {
+                  "key": "org",
+                  "operator": "=~",
+                  "value": "/^$org$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "center",
+                  "operator": "=~",
+                  "value": "/^$dc$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "space",
+                  "operator": "=~",
+                  "value": "/^$space$/"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "평균 CPU Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_BLUEMIX_APP}",
+          "description": "단순 평균값",
+          "fill": 0,
+          "hideTimeOverride": false,
+          "id": 23,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "dashUri": "db/bluemix-app-app",
+              "dashboard": "BLUEMIX: APP: APP",
+              "includeVars": true,
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "BLUEMIX: APP: APP",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 2,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$tag_app",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "1m"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "app"
+                  ],
+                  "type": "tag"
+                }
+              ],
+              "measurement": "bluemix_app_instance_info",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "refId": "A",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "memoryQuota"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": [
+                {
+                  "key": "org",
+                  "operator": "=~",
+                  "value": "/^$org$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "center",
+                  "operator": "=~",
+                  "value": "/^$dc$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "space",
+                  "operator": "=~",
+                  "value": "/^$space$/"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "평균 Memory Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "decbytes",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_BLUEMIX_APP}",
+          "description": "단순 평균값",
+          "fill": 0,
+          "hideTimeOverride": false,
+          "id": 24,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "dashUri": "db/bluemix-app-app",
+              "dashboard": "BLUEMIX: APP: APP",
+              "includeVars": true,
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "BLUEMIX: APP: APP",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 2,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$tag_app",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "1m"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "app"
+                  ],
+                  "type": "tag"
+                }
+              ],
+              "measurement": "bluemix_app_instance_info",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "refId": "A",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "diskUsage"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": [
+                {
+                  "key": "org",
+                  "operator": "=~",
+                  "value": "/^$org$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "center",
+                  "operator": "=~",
+                  "value": "/^$dc$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "space",
+                  "operator": "=~",
+                  "value": "/^$space$/"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Disk Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "decbytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_BLUEMIX_APP}",
+          "decimals": 0,
+          "description": "",
+          "fill": 0,
+          "hideTimeOverride": false,
+          "id": 69,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "dashUri": "db/bluemix-app-app",
+              "dashboard": "BLUEMIX: APP: APP",
+              "includeVars": true,
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "BLUEMIX: APP: APP",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 2,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$tag_app",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "app"
+                  ],
+                  "type": "tag"
+                }
+              ],
+              "measurement": "bluemix_app_info",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "refId": "B",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "instances"
+                    ],
+                    "type": "field"
+                  }
+                ]
+              ],
+              "tags": [
+                {
+                  "key": "org",
+                  "operator": "=~",
+                  "value": "/^$org$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "center",
+                  "operator": "=~",
+                  "value": "/^$dc$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "space",
+                  "operator": "=~",
+                  "value": "/^$space$/"
+                }
+              ]
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "App Instance 추이",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "none",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        }
+      ],
+      "repeat": "space",
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 168,
+      "panels": [
+        {
+          "id": 7,
+          "links": [],
+          "span": 12,
+          "title": "",
+          "type": "grafana-alarm_current-panel"
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    }
+  ],
+  "schemaVersion": 14,
+  "style": "dark",
+  "tags": [
+    "bmxApp"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_BLUEMIX_APP}",
+        "hide": 0,
+        "includeAll": false,
+        "label": "블루믹스 인스턴스",
+        "multi": false,
+        "name": "dc",
+        "options": [],
+        "query": "show tag values with key = \"center\" ",
+        "refresh": 1,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_BLUEMIX_APP}",
+        "hide": 0,
+        "includeAll": false,
+        "label": "조직(ORG)",
+        "multi": false,
+        "name": "org",
+        "options": [],
+        "query": "show tag values with key = \"org\"  where center =~ /$dc/",
+        "refresh": 1,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_BLUEMIX_APP}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "영역(SPACE)",
+        "multi": true,
+        "name": "space",
+        "options": [],
+        "query": "show tag values with key = \"space\"",
+        "refresh": 1,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "BLUEMIX: APP: SPACE",
+  "version": 49
+}
