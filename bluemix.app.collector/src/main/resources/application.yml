@@ -1,0 +1,51 @@
+info:
+  app:
+    name: onm-collector-app-bluemix
+    version: 0.0.1-SNAPSHOT
+    description: bluemix app metric collector
+
+spring:
+  profiles:
+    active: development
+  pid:
+    file: /app/onm-collector-app-bluemix/run/onm-collector-app-bluemix.pid
+
+
+log:
+  file:
+#    path: /applog/onm-collector-app-bluemix
+    path: logs
+    
+#endpoints:
+#  sensitive: false
+  
+management:
+ security:
+  enabled: false
+  
+server:
+  port: 8083
+---
+spring:
+  profiles: development
+
+bluemix:
+  collector:
+    period: 60000
+    bluemix-properties:
+    - center: bong-dev
+      ip: 
+      user: 
+      password: 
+      skip-ssl-validation: false
+  kafka:
+    topic: blumix_app
+    producer:
+      bootstrap-servers-configs: 
+      acks: all
+      retries-configs: 0
+      batch-size-configs: 16384 
+      linger-ms-config: 0
+      buffer-memory-config: 33554432 
+      key-serializer-class-config: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer-class-config: org.apache.kafka.common.serialization.StringSerializer

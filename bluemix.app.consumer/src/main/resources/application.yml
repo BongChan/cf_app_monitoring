@@ -1,0 +1,44 @@
+info:
+  app:
+    name: onm-consumer-app-bluemix
+    version: 0.0.1-SNAPSHOT
+    description: bluemix app metric consumer
+
+spring:
+  profiles:
+    active: development
+  pid:
+    file: /app/onm-consumer-app-bluemix/run/onm-consumer-app-bluemix.pid
+    
+log:
+  file:
+    path: logs
+    
+management:
+  security:
+    enabled: false 
+server:
+  port: 8081
+---
+spring:
+  profiles: development
+bluemix:
+  kafka:
+    topics: blumix_app
+    pollTimeout: 1000
+    concurrency: 1
+    consumer:
+      boot-strap-servers: 
+      group-id: bluemix-app-consumer1
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      auto-commit-interval-ms: 1000
+      session-timeout-ms: 30000
+      key-deserializer-class-config: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer-class-conifg: org.apache.kafka.common.serialization.StringDeserializer
+  influxdb:
+    url: 
+    user: 
+    password: 
+    database: bluemix_app
+    retention-policy: autogen
